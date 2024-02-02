@@ -1,0 +1,31 @@
+name: test
+
+on:
+  pull_request:
+  push:
+    branches:
+    - 'main'
+
+jobs:
+  build:
+    permissions:
+      contents: write
+    env:
+      NODE_VERSION: v20.11.0
+    runs-on: ubuntu-latest
+    steps:
+    - run: sudo apt update -y
+    - run: sudo apt install -y xz-utils
+    - uses: actions/checkout@v4
+    - run: ./update.sh
+    - run: ./bake.sh nodejs
+    - run: mv nodejs.raw nodejs-${NODE_VERSION}.raw
+    - run: echo "$(shasum nodejs-${NODE_VERSION}.raw | awk '{ print $1 }') nodejs-${NODE_VERSION}.raw" > checksums.txt
+    - uses: pyTooling/Actions/releaser@r0
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        tag: nodejs-nightly
+        rm: true
+        files: |
+          nodejs-*.raw
+          checksums.txt

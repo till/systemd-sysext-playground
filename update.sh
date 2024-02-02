@@ -3,13 +3,16 @@ set -euxo pipefail
 
 EXT_NAME=nodejs
 
+_dl="node-${NODE_VERSION}-linux-x64.tar"
+
 # clean up
 rm -rf ${EXT_NAME}
 
 # download 
-curl "https://nodejs.org/dist/v20.11.0/node-${NODE_VERSION}-linux-x64.tar.xz" \
-    -o node-${NODE_VERSION}-linux-x64.tar.xz
-tar zxvf node-${NODE_VERSION}-linux-x64.tar.xz
+curl "https://nodejs.org/dist/${NODE_VERSION}/${_dl}.xz" \
+    -o ${_dl}.xz
+xz --decompress ${_dl}.xz
+tar xf ${_dl}
 
 rm node-${NODE_VERSION}-linux-x64/CHANGELOG.md
 rm node-${NODE_VERSION}-linux-x64/LICENSE
