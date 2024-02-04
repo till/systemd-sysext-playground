@@ -1,0 +1,8 @@
+nodejs/usr/bin/
+nodejs/usr/include
+nodejs/usr/lib/node_modules
+nodejs/usr/share
+checksums.txt
+*.tar.xz
+*.tar
+*.raw
